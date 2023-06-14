@@ -1,4 +1,5 @@
 use std::ops::Mul;
+use std::f32::consts::PI;
 
 /// matrix math library
 /// note: all angles are in radians
@@ -10,22 +11,23 @@ pub enum Axis
 }
 
 /// 3 x 3 matrix
+#[derive(Copy, Clone)]
 pub struct Mat3
 {
   // row 0
-  x0: f32,
-  y0: f32,
-  z0: f32,
+  pub x0: f32,
+  pub y0: f32,
+  pub z0: f32,
 
   // row 1
-  x1: f32,
-  y1: f32,
-  z1: f32,
+  pub x1: f32,
+  pub y1: f32,
+  pub z1: f32,
 
   // row 2
-  x2: f32,
-  y2: f32,
-  z2: f32,
+  pub x2: f32,
+  pub y2: f32,
+  pub z2: f32,
 }
 
 /// matrix functions
@@ -35,6 +37,12 @@ impl Mat3
   pub fn new(x0: f32, y0: f32, z0: f32, x1: f32, y1: f32, z1: f32, x2: f32, y2: f32, z2: f32,) -> Mat3
   {
     Mat3 {x0, y0, z0, x1, y1, z1, x2, y2, z2}
+  }
+
+  pub fn new_id() -> Mat3
+  {
+    let m: Mat3 = Mat3::new(1., 0., 0., 0., 1., 0., 0., 0., 1.);
+    m
   }
 
   /// copies a into self
@@ -79,7 +87,7 @@ impl Mat3
   }
 
   /// creates rotation matrix and multiplies it by self
-  pub fn rotation(&mut self, axis: Axis, ang: f32) -> &mut Self
+  pub fn rotate(&mut self, axis: Axis, ang: f32) -> &mut Self
   {
     // create rotation matrix
     let rot_mat: Mat3;
@@ -115,11 +123,12 @@ impl Mat3
 }
 
 /// 3 x 1 vector
+#[derive(Copy, Clone)]
 pub struct Vec3
 {
-  x: f32,
-  y: f32,
-  z: f32,
+  pub x: f32,
+  pub y: f32,
+  pub z: f32,
 }
 
 /// vector functions
@@ -142,6 +151,11 @@ impl Vec3
   }
 }
 
+/// misc operations 
+pub fn radians(degs: f32) -> f32
+{
+  degs * (PI / 180.)
+}
 /// overloading matrix * vector multiplication
 /// results in a 3 x 1 vector
 impl Mul<Vec3> for Mat3
